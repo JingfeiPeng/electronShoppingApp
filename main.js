@@ -10,9 +10,6 @@ let addWindow;
 // create menu template
 const mainMenuTemplate = [
     {
-        label: "File"
-    },
-    {
         label: "File",
         submenu: [
             { 
@@ -32,6 +29,32 @@ const mainMenuTemplate = [
         ]
     },
 ];
+
+// if mac, add a placeholder menu at beginning
+if (process.platform === 'darwin'){
+    mainMenuTemplate.unshift({ // unshift push to front of an arrary
+        label: "File"
+    })
+}
+
+if (process.env.NODE_env !== 'production'){
+    mainMenuTemplate.push({ // unshift push to front of an arrary
+        label: "Developer Tools",
+        submenu:[
+            {            
+                label: 'Toggle DevTools',
+                accelerator: process.platform == 'darwin' ? "Command+I": "Ctrl+I",
+                click(item, focusedWindow){
+                    focusedWindow.toggleDevTools();
+                }
+            },
+            {
+                role:"reload"
+            }
+        ]
+        
+    })
+}
 
 // listen for app to be ready
 app.on('ready', function(){
@@ -67,4 +90,8 @@ function createAddWindow(){
         protocol: 'file:',
         slashes: true
     }));
+    // helps memory garbage collection
+    addWindow.on('closed', function(){
+        addWindow = null;
+    })
 }
