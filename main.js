@@ -2,6 +2,10 @@ const electron =  require('electron');
 const url = require('url');
 const path = require('path')
 
+// set ENV
+process.env.NODE_ENV = 'production';
+
+
 const { app, BrowserWindow, Menu, ipcMain } =  electron;
 
 let mainWindow;
@@ -50,7 +54,7 @@ if (process.platform === 'darwin'){
     })
 }
 
-if (process.env.NODE_env !== 'production'){
+if (process.env.NODE_ENV !== 'production'){
     mainMenuTemplate.push({ // unshift push to front of an arrary
         label: "Developer Tools",
         submenu:[
